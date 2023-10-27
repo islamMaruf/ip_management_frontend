@@ -5,36 +5,87 @@
                 <Card title="Login">
                     <form>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                                placeholder="Enter email">
-                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
-                                else.</small>
+                            <label>Email address</label>
+                            <input name="email" v-model="input.email" class="form-control"
+                                :class="{ 'is-invalid': errors.has('email') }" v-validate="'required'"
+                                placeholder="Enter email" />
+                            <ErrorText v-show="errors.has('email')">{{ errors.first("email") }}</ErrorText>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                            <label>Password</label>
+                            <input name="password" v-model="input.password" v-validate="'required'" type="password"
+                                class="form-control" :class="{ 'is-invalid': errors.has('password') }" id="password"
+                                placeholder="Password" />
+                            <ErrorText v-show="errors.has('password')">{{ errors.first("password") }}</ErrorText>
                         </div>
-                        <Button>Login</Button>
+                        <div>
+                            <ErrorText v-show="error">{{ error_message }}</ErrorText>
+                        </div>
+
+                        <Button :is-submit="true" @submit="login">Login</Button>
                     </form>
                 </Card>
             </div>
         </div>
     </div>
 </template>
-  
+
 <script>
 import Card from "../components/core/Card.vue"
 import Button from "../components/core/Button.vue"
+import ErrorText from "../components/core/ErrorText.vue"
+import AuthService from "@/services/api/AuthService"
+
 export default {
     name: 'LoginPage',
     components: {
         Card,
-        Button
+        Button,
+        ErrorText
+    },
+    data() {
+        return {
+            input: {
+                email: "",
+                password: ""
+            },
+            error_message: 'Something went wrong. Try again after some time',
+            error: false
+
+        }
+    },
+    computed: {
+
+    },
+    methods: {
+        resetProperty() {
+            this.input.email = "";
+            this.input.password = "";
+        },
+        login() {
+            this.$validator.validateAll().then((validate) => {
+                if (validate) {
+                    this._error = false;
+                    AuthService.login(this.input).then(response => {
+                        let response_status = response.success;
+                        let access_token = response.data.access_token;
+                        if (response_status && response.code == 200 && access_token) {
+                            this.$cookieService.setCookie('token', access_token, 1);
+                            this.$store.commit('setAuthenticateUser', response.data.user);
+                            this.$router.push({ name: 'Dashboard' });
+                        }
+                    }).catch(error => {
+                        let error_response = error.response;
+                        if (error_response.status == 422) {
+                           this.$addLaravelErrors(error_response)
+                        } else if (error_response.status == 401) {
+                            this.error_message = 'Email or Password not matched';
+                            this.error = true;
+                        }
+                    });
+                }
+            });
+        }
     }
 }
 </script>
-  
-<style scoped>
-</style>
-  

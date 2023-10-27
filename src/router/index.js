@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 import LoginPage from "../views/LoginPage.vue"
+import DashboardPage from "../views/DashboardPage.vue"
 
 
 const routes = [
@@ -11,8 +12,14 @@ const routes = [
     name: 'Login',
     component: LoginPage,
     alias: '/login',
-    meta: {page_title: 'Login | IP Solution'},
-  }
+    meta: {page_title: 'Login | IP Management'},
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: DashboardPage,
+    meta: {page_title: 'Dashboard | IP Management'},
+  },
 ]
 
 const router = new VueRouter({

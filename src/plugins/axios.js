@@ -1,7 +1,7 @@
 import axios from 'axios';
-
+console.log(process.env)
 const axiosInstance = axios.create({
-    baseURL: process.env.BASE_URL,
+    baseURL: process.env.VUE_APP_BASE_URL,
     timeout: 1000,
 });
 
@@ -23,13 +23,8 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
-        
         return Promise.reject(error);
     }
 );
 
-export default {
-    install: (Vue) => {
-        Vue.prototype.$axios = axiosInstance;
-    },
-};
+export default axiosInstance;

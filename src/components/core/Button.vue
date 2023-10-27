@@ -1,5 +1,5 @@
 <template>
-    <button :class="['btn', 'btn-' + type, { 'btn-block': block }]" @click="handleClick" type="button">
+    <button :class="['btn', 'btn-' + type, { 'btn-block': block }]" @click="handleClick" :disabled="isDisable" type="button">
         <slot></slot>
     </button>
 </template>
@@ -20,6 +20,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        isDisable:{
+            type:Boolean,
+            default:false
+        }
     },
     methods: {
         handleClick() {

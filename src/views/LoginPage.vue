@@ -18,11 +18,9 @@
                                 placeholder="Password" />
                             <ErrorText v-show="errors.has('password')">{{ errors.first("password") }}</ErrorText>
                         </div>
-                        <div>
-                            <ErrorText v-show="error">{{ error_message }}</ErrorText>
-                        </div>
+                        <div class="error-message" v-if="has_error">{{ error_message }}</div>
 
-                        <Button :is-submit="true" @submit="login">Login</Button>
+                        <Button :is-submit="true" :is-disable="is_submit" @submit="login">Login</Button>
                     </form>
                 </Card>
             </div>
@@ -50,22 +48,22 @@ export default {
                 password: ""
             },
             error_message: 'Something went wrong. Try again after some time',
-            error: false
+            has_error: false,
+            is_submit: false
 
         }
     },
-    computed: {
 
-    },
     methods: {
-        resetProperty() {
+        resetForm() {
             this.input.email = "";
             this.input.password = "";
         },
         login() {
             this.$validator.validateAll().then((validate) => {
                 if (validate) {
-                    this._error = false;
+                    this.has_error = false;
+                    this.isSubmit = true;
                     AuthService.login(this.input).then(response => {
                         let response_status = response.success;
                         let access_token = response.data.access_token;
@@ -73,19 +71,33 @@ export default {
                             this.$cookieService.setCookie('token', access_token, 1);
                             this.$store.commit('setAuthenticateUser', response.data.user);
                             this.$router.push({ name: 'Dashboard' });
+                            this.resetForm()
+                            this.is_submit = false
                         }
                     }).catch(error => {
-                        let error_response = error.response;
-                        if (error_response.status == 422) {
-                           this.$addLaravelErrors(error_response)
-                        } else if (error_response.status == 401) {
+                        if (error.status && error_response.status == 422) {
+                            this.$addLaravelErrors(error_response)
+                        } else if (error.status && error_response.status == 401) {
                             this.error_message = 'Email or Password not matched';
-                            this.error = true;
+                            this.has_error = true;
+                        } else {
+                            this.has_error = true;
                         }
-                    });
+                        this.is_submit = false
+                    })
                 }
             });
         }
     }
 }
 </script>
+
+<style scoped>
+.error-message {
+    display: block;
+    width: 100%;
+    margin: 1rem 0rem;
+    font-size: 80%;
+    color: #dc3545;
+}
+</style>

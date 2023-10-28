@@ -42,7 +42,6 @@ axios_instance.interceptors.response.use(
                         CookieService.setCookie('token', new_access_token, 1);
                         original_request.headers.Authorization = `Bearer ${new_access_token}`;
                     }
-                    
                 } catch (refreshError) {
                     // throw error;
                 }

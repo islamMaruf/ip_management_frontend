@@ -1,5 +1,10 @@
 {
   "name": "ip_management_frontend",
+  "author": {
+    "name": "Md Maruf Islam",
+    "email": "marufislam7424@gmail.com",
+    "url" : "https://islammaruf.github.io"
+  },
   "version": "0.1.0",
   "private": true,
   "scripts": {

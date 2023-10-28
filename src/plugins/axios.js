@@ -52,8 +52,8 @@ axios_instance.interceptors.response.use(
             CookieService.deleteCookie('token');
             if (router.history.current.name != "Login") {
                 router.push({ name: 'Login' }).catch(console.error);
-            }
-            ;
+            };
+            return;
         }
         return Promise.reject(error);
     }

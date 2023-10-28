@@ -1,58 +1,78 @@
-
 import axios from 'axios';
-import router from '../router';
-import CookieService from '../services/core/CookieService';
+import router from '@/router';
+import CookieService from '@/services/core/CookieService';
 import AuthService from '@/services/api/AuthService';
 
-console.log(process.env);
-const _axiosInstance = axios.create({
+const axiosInstance = axios.create({
     baseURL: process.env.VUE_APP_BASE_URL,
     timeout: 1000,
 });
 
-_axiosInstance.interceptors.request.use(
-    (config) => {
-        const token = CookieService.getCookie('token');
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
-    }
+axiosInstance.interceptors.request.use(
+    addAuthorizationHeader,
+    error => Promise.reject(error)
 );
 
+axiosInstance.interceptors.response.use(
+    handleResponse,
+    handleErrorResponse
+);
 
-_axiosInstance.interceptors.response.use(
-    (response) => {
-        return response;
-    },
-    async (error) => {
-        if (error.response && error.response.status == 401 && router.history.current.meta.auth) {
-            error.config.retries = error.config.retries || 0;
-            const maxRetries = 10;
-            if (error.config.retries < maxRetries) {
-                error.config.retries++;
-                try {
-                    const response = await AuthService.refreshToken();
-                    const original_request = error.config;
-                    if (response.status == 200 && response.data.status && response.data.data.access_token) {
-                        let new_access_token = response.data.data.access_token;
-                        CookieService.setCookie('token', new_access_token, 1);
-                        original_request.headers.Authorization = `Bearer ${new_access_token}`;
-                    }
-                    return _axiosInstance(original_request);
-                } catch (refreshError) {
-                    throw refreshError;
-                }
+function addAuthorizationHeader(config) {
+    const token = CookieService.getCookie('token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+}
+
+async function handleResponse(response) {
+    return response;
+}
+
+async function handleErrorResponse(error) {
+    if (error.response) {
+        const status = error.response.status;
+        if (status === 401) {
+            return handleAuthenticationError(error);
+        } else if (status === 403 || status === 429) {
+            return handleForbiddenAndTooManyRequestError(error);
+        }
+    }
+
+    return Promise.reject(error);
+}
+
+async function handleAuthenticationError(error) {
+    error.config.retries = error.config.retries || 0;
+    const maxRetries = 5;
+
+    if (error.config.retries < maxRetries) {
+        error.config.retries++;
+        const originalRequest = error.config;
+
+        try {
+            const response = await AuthService.refreshToken();
+
+            if (response.status === 200 && response.data.success && response.data.data.access_token) {
+                const newAccessToken = response.data.data.access_token;
+                CookieService.setCookie('token', newAccessToken, 1);
+                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                return axiosInstance(originalRequest);
             }
+        } catch (refreshError) {
+            throw refreshError;
         }
-        else if (error.response && error.response.status == 403) {
-            CookieService.deleteCookie('token');
-            router.push({ name: 'Login' });
-        }
-        return Promise.reject(error);
     }
-);
-export default _axiosInstance;
+
+    return Promise.reject(error);
+}
+
+function handleForbiddenAndTooManyRequestError(error) {
+    CookieService.deleteCookie('token');
+    if (router.name !== 'Login') {
+        router.push({ name: 'Login' });
+    }
+}
+
+export default axiosInstance;

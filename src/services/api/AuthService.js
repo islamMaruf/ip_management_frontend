@@ -6,23 +6,30 @@ export default {
             let { data } = await _axiosInstance.post('/api/auth/login', payload);
             return data;
         } catch (error) {
-            console.log('hitted')
             throw error;
         }
     },
-    async refreshToken(payload) {
+    async refreshToken() {
         try {
             return await _axiosInstance.post('/api/auth/refresh');
         } catch (error) {
             throw error;
         }
     },
-    async getLoggedInUser(){
+    async getLoggedInUser() {
         try {
-            let {data} =  await _axiosInstance.post('/api/auth/user-profile');
-            return data
+            return await _axiosInstance.get('/api/auth/user-profile');
         } catch (error) {
             throw error;
         }
+    },
+    async logout(){
+        try{
+            return await _axiosInstance.post("/api/auth/logout")
+        }catch(error){
+            throw error;
+
+        }
     }
+
 };

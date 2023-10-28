@@ -32,7 +32,7 @@ Compiles and hot-reloads for development
 ```
 npm run serve
 ```
-Now to to the url.
+Now go to the url.
 
 ## Login Credentials
 

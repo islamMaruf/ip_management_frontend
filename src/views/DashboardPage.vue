@@ -7,28 +7,17 @@
         </Navbar>
         <div class="container mt-5">
             <Card title="IP Management">
-                <Table>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td>@twitter</td>
-                        </tr>
-                    </tbody>
-                </Table>
+                <template v-slot:header>
+                    <div class="col-sm-6">
+                        <Button style="float: right;" :sm="true" type="info" @click="goToActivityLoggerPage">Activity Logger</Button>
+                    </div>
+                </template>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <router-view></router-view>
+                    </div>
+                </div>
+
             </Card>
         </div>
 
@@ -36,10 +25,9 @@
 </template>
 
 <script>
-import Card from "../components/core/Card.vue";
-import Navbar from "../components/Navbar.vue"
-import Button from '../components/core/Button.vue';
-import Table from "../components/core/Table.vue";
+import Card from "@/components/core/Card.vue";
+import Navbar from "@/components/Navbar.vue"
+import Button from '@/components/core/Button.vue';
 import AuthService from '@/services/api/AuthService'
 
 
@@ -48,8 +36,7 @@ export default {
     components: {
         Navbar,
         Button,
-        Card,
-        Table
+        Card
     },
     methods: {
         logout() {
@@ -60,6 +47,11 @@ export default {
                 }
             }).catch(console.error)
 
+        },
+        goToActivityLoggerPage() {
+            this.$router.push({
+                name: 'activityLogger'
+            })
         }
     }
 

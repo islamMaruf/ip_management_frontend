@@ -9,7 +9,7 @@ export default {
         setAuthenticateUser: function () {
             return AuthService.getLoggedInUser().then(response => {
                 this.$store.commit('setAuthenticateUser', response.data.data );
-            });
+            }).catch(console.error);
         },
 
         getAuthenticateUserName: function () {

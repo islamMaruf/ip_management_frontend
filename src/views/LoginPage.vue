@@ -29,9 +29,9 @@
 </template>
 
 <script>
-import Card from "../components/core/Card.vue"
-import Button from "../components/core/Button.vue"
-import ErrorText from "../components/core/ErrorText.vue"
+import Card from "@/components/core/Card.vue"
+import Button from "@/components/core/Button.vue"
+import ErrorText from "@/components/core/ErrorText.vue"
 import AuthService from "@/services/api/AuthService"
 
 export default {
@@ -53,7 +53,14 @@ export default {
 
         }
     },
-
+    watch: {
+        'input': {
+            deep: true,
+            handler() {
+               this.has_error = false
+            }
+        },
+    },
     methods: {
         resetForm() {
             this.input.email = "";
@@ -75,11 +82,13 @@ export default {
                             this.is_submit = false
                         }
                     }).catch(error => {
-                        if (error.status && error_response.status == 422) {
+                        let error_response = error.response
+                        if (error_response && error_response.status == 422) {
                             this.$addLaravelErrors(error_response)
-                        } else if (error.status && error_response.status == 401) {
-                            this.error_message = 'Email or Password not matched';
+                        } else if (error_response && error_response.status == 401) {
                             this.has_error = true;
+                            this.error_message = 'Email or Password not matched';
+                            console.log(this.error_message)
                         } else {
                             this.has_error = true;
                         }

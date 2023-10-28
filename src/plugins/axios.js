@@ -71,7 +71,7 @@ async function handleAuthenticationError(error) {
 function handleForbiddenAndTooManyRequestError(error) {
     CookieService.deleteCookie('token');
     if (router.name !== 'Login') {
-        router.push({ name: 'Login' });
+        router.push('/');
     }
 }
 

@@ -65,7 +65,7 @@ export default {
                     IPService.updateIP(this.$route.params.id, this.input).then(response => {
                         let response_status = response.success;
                         if (response_status && response.code == 200) {
-                            this.$router.push({ name: 'Dashboard' });
+                            this.$router.push({ name: 'Dashboard' }).catch(console.error);
                             this.resetForm()
                             this.is_submit = false
                         }

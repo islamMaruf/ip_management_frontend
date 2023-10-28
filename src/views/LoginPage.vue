@@ -77,7 +77,7 @@ export default {
                         if (response_status && response.code == 200 && access_token) {
                             this.$cookieService.setCookie('token', access_token, 1);
                             this.$store.commit('setAuthenticateUser', response.data.user);
-                            this.$router.push({ name: 'Dashboard' });
+                            this.$router.push({ name: 'Dashboard' }).catch(console.error);
                             this.resetForm()
                             this.is_submit = false
                         }

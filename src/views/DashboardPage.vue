@@ -43,7 +43,7 @@ export default {
             AuthService.logout().then(response => {
                 if (response.status == 200 && response.data.success) {
                     this.$cookieService.deleteCookie('token')
-                    this.$router.push({ name: 'Login' })
+                    this.$router.push({ name: 'Login' }).catch(console.error)
                 }
             }).catch(console.error)
 
@@ -51,7 +51,7 @@ export default {
         goToActivityLoggerPage() {
             this.$router.push({
                 name: 'activityLogger'
-            })
+            }).catch(console.error)
         }
     }
 

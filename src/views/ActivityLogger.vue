@@ -73,10 +73,10 @@ export default {
             }
 
         },
-        goBack(){
+        goBack() {
             this.$router.push({
-                name:"Dashboard"
-            })
+                name: "Dashboard"
+            }).catch(console.error)
         }
 
     },

@@ -55,12 +55,12 @@ export default {
             this.$router.push({
                 name: "EditIP",
                 params: { id: ipId }
-            })
+            }).catch(console.error)
         },
         goToCreateIpPage() {
             this.$router.push({
                 name: 'CreateIP'
-            })
+            }).catch(console.error)
         }
     },
     mounted() {

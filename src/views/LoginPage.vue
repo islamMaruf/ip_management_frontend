@@ -7,13 +7,13 @@
                         <div class="form-group">
                             <label>Email address</label>
                             <input name="email" v-model="input.email" class="form-control"
-                                :class="{ 'is-invalid': errors.has('email') }" v-validate="'required'"
+                                :class="{ 'is-invalid': errors.has('email') }" v-validate="'required|email'"
                                 placeholder="Enter email" />
                             <ErrorText v-show="errors.has('email')">{{ errors.first("email") }}</ErrorText>
                         </div>
                         <div class="form-group">
                             <label>Password</label>
-                            <input name="password" v-model="input.password" v-validate="'required'" type="password"
+                            <input name="password" v-model="input.password" v-validate="'required|min:6|max:17'" type="password"
                                 class="form-control" :class="{ 'is-invalid': errors.has('password') }" id="password"
                                 placeholder="Password" />
                             <ErrorText v-show="errors.has('password')">{{ errors.first("password") }}</ErrorText>

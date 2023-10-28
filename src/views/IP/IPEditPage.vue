@@ -5,14 +5,14 @@ import LoginPageVue from '../LoginPage.vue';
     <form>
         <div class="form-group">
             <label>IP Address</label>
-            <input name="ip" v-model="input.ip" class="form-control" :class="{ 'is-invalid': errors.has('ip') }"
+            <input name="ip" v-model="input.ip" class="form-control" :class="{ 'is-invalid': errors.has('ip') }" disabled
                 v-validate="'required|ip'" placeholder="Enter Ip address" />
             <ErrorText v-show="errors.has('ip')">{{ errors.first("ip") }}</ErrorText>
         </div>
         <div class="form-group">
             <label>Comment</label>
-            <input name="comment" v-model="input.comment" v-validate="'required'" type="text" class="form-control"
-                :class="{ 'is-invalid': errors.has('comment') }" id="password" placeholder="Comment" />
+            <input name="comment" v-model="input.comment" v-validate="'required|max:75'" type="text" class="form-control"
+                :class="{ 'is-invalid': errors.has('comment') }" id="comment" placeholder="Comment" />
             <ErrorText v-show="errors.has('comment')">{{ errors.first("comment") }}</ErrorText>
         </div>
         <div class="error-message" v-if="has_error">{{ error_message }}</div>

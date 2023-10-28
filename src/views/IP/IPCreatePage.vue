@@ -8,8 +8,8 @@
         </div>
         <div class="form-group">
             <label>Comment</label>
-            <input name="comment" v-model="input.comment" v-validate="'required'" type="text" class="form-control"
-                :class="{ 'is-invalid': errors.has('comment') }" id="password" placeholder="Comment" />
+            <input name="comment" v-model="input.comment"  v-validate="'required|max:75'" type="text" class="form-control"
+                :class="{ 'is-invalid': errors.has('comment') }" id="comment" placeholder="Comment" />
             <ErrorText v-show="errors.has('comment')">{{ errors.first("comment") }}</ErrorText>
         </div>
         <div class="error-message" v-if="has_error">{{ error_message }}</div>

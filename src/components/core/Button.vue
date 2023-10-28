@@ -1,12 +1,12 @@
 <template>
-    <button :class="['btn', 'btn-' + type, { 'btn-block': block }]" @click="handleClick" :disabled="isDisable" type="button">
+    <button :class="['btn',  'btn-' + type, { 'btn-block': block }, {'btn-sm' : sm}]" @click="handleClick" :disabled="isDisable" type="button">
         <slot></slot>
     </button>
 </template>
 
 <script>
 export default {
-    name:"ButtonComponent",
+    name:"ButtonComponent", 
     props: {
         type: {
             type: String,
@@ -21,6 +21,10 @@ export default {
             default: false,
         },
         isDisable:{
+            type:Boolean,
+            default:false
+        },
+        sm:{
             type:Boolean,
             default:false
         }

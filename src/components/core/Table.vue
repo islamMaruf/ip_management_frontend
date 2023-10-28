@@ -1,5 +1,5 @@
 <template>
-    <table class="table">
+    <table :class="['table', 'table-bordered', { 'table-sm': sm }, { 'table-responsive': responsive }]">
         <thead class="thead-dark">
             <tr>
                 <th v-for="(header, index) in headers" :key="index">{{ header }}</th>
@@ -16,6 +16,14 @@ export default {
     name: "TableComponent",
     props: {
         headers: Array,
+        sm: {
+            type: Boolean,
+            default: false
+        },
+        responsive: {
+            type: Boolean,
+            default: false
+        }
     },
 };
 </script>

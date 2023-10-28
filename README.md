@@ -55,3 +55,25 @@ Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## Screenshot
+
+Login Page
+
+![login_page](https://github.com/islamMaruf/ip_management_frontend/blob/master/public/screenshot/login_page_ip.png?raw=true)
+
+IP List Page
+
+![ip_list_page](https://github.com/islamMaruf/ip_management_frontend/blob/master/public/screenshot/ip_list_ip.png?raw=true)
+
+Create IP Page
+
+![create_ip_page](https://github.com/islamMaruf/ip_management_frontend/blob/master/public/screenshot/create_ip.png?raw=true)
+
+Edit IP Page
+
+![edit_ip_page](https://github.com/islamMaruf/ip_management_frontend/blob/master/public/screenshot/edit_ip.png?raw=true)
+
+
+
+Activity Logger Page
+
+![activity_logger_image](https://raw.githubusercontent.com/islamMaruf/ip_management_frontend/master/public/screenshot/activity.png)
